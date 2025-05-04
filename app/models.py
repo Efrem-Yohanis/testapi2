@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 
 class Portfolio(models.Model):
+    event_id= models.CharField(max_length=50, null=true, blank=true)
+    event_type= models.CharField(max_length=50, null=true, blank=true)
     user_sk = models.CharField(max_length=50)
     user_id = models.CharField(max_length=50)
     number = models.CharField(max_length=50)
