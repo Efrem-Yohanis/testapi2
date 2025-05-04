@@ -5,18 +5,19 @@ class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Portfolio
         fields = '__all__'
-        
+        extra_kwargs = {
+            'user_sk': {'required': True},
+            'user_id': {'required': True},
+            'number': {'required': True},
+            'name': {'required': True},
+            'last_name': {'required': True},
+            'first_name': {'required': True},
+            'is_active': {'required': False, 'default': True},
+            'broker_dealer_id': {'required': False}
+        }
 
-class BulkPortfolioSerializer(serializers.Serializer):
-    payload = PortfolioSerializer(many=True)
-
-    def create(self, validated_data):
-        portfolios = []
-        for item in validated_data['payload']:
-            portfolio = Portfolio.objects.create(**item)
-            portfolios.append(portfolio)
-        return {'portfolios': portfolios}
-
-    def update(self, instance, validated_data):
-        # Handle bulk update if needed
-        pass
+    def validate(self, data):
+        """Ensure either user_sk or user_id is provided"""
+        if not data.get('user_sk') and not data.get('user_id'):
+            raise serializers.ValidationError("Either user_sk or user_id must be provided")
+        return data
