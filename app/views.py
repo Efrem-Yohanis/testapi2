@@ -34,20 +34,20 @@ class PortfolioCreateView(APIView):
 class PortfolioUpdateView(APIView):
     """Handle PUT /update/{api_id} requests"""
     
-    def put(self, request, api_id):
-        portfolio = get_object_or_404(Portfolio, api_id=api_id)
+    def put(self, request, id):
+        portfolio = get_object_or_404(Portfolio, id=id)
         serializer = PortfolioSerializer(portfolio, data=request.data['payload'][0], partial=True)
         
         if serializer.is_valid():
             serializer.save()
-            logger.info(f"Updated portfolio {api_id}")
+            logger.info(f"Updated portfolio {user_id}")
             return Response({
                 'status': 'success',
-                'api_id': api_id,
+                'user_id': user_id,
                 'data': serializer.data
             })
             
-        logger.error(f"Update error for {api_id}: {serializer.errors}")
+        logger.error(f"Update error for {user_id}: {serializer.errors}")
         return Response({
             'status': 'error',
             'errors': serializer.errors
@@ -68,21 +68,21 @@ class PortfolioListView(APIView):
 class PortfolioDetailView(APIView):
     """Handle GET single, PUT, and DELETE operations"""
     
-    def get(self, request, api_id):
-        portfolio = get_object_or_404(Portfolio, user_id=user_id)
+    def get(self, request, id):
+        portfolio = get_object_or_404(Portfolio, id=id)
         serializer = PortfolioSerializer(portfolio)
         return Response({
             'status': 'success',
             'data': serializer.data
         })
     
-    def put(self, request, api_id):
-        portfolio = get_object_or_404(Portfolio, api_id=api_id)
+    def put(self, request, id):
+        portfolio = get_object_or_404(Portfolio, id=id)
         serializer = PortfolioSerializer(portfolio, data=request.data['payload'][0], partial=True)
         
         if serializer.is_valid():
             serializer.save()
-            logger.info(f"Updated portfolio {api_id}")
+            logger.info(f"Updated portfolio {user_id}")
             return Response({
                 'status': 'success',
                 'data': serializer.data
@@ -94,10 +94,10 @@ class PortfolioDetailView(APIView):
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, api_id):
-        portfolio = get_object_or_404(Portfolio, api_id=api_id)
+    def delete(self, request, id):
+        portfolio = get_object_or_404(Portfolio, id=id)
         portfolio.delete()
-        logger.info(f"Deleted portfolio {api_id}")
+        logger.info(f"Deleted portfolio {user_id}")
         return Response({
             'status': 'success',
             'message': 'Portfolio deleted successfully'
