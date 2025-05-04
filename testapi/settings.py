@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-azlh8go3-v$h5ln!7uem++rg5h+o^hp4oa1+!fdl@%)a!u6lop
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['testapi2-9ui2.onrender.com', '127.0.0.1']
+# In your settings.py
+ALLOWED_HOSTS = [
+    'testapi2-9ui2.onrender.com',  # Your Render.com host
+    'localhost',                   # For local development
+    '127.0.0.1',                   # For local development
+]
 
 
 # Application definition
